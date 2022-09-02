@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION:-8.4.0}
+    user: root
+    volumes:
+      # - filebeat:/usr/share/filebeat/data
+      # - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      # - ./logs:/var/log/mybeat
+    environment:
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST}
+      - KIBANA_HOST=${KIBANA_HOST}
+      - ELASTICSEARCH_API_KEY=${ELASTICSEARCH_API_KEY}
+      - CONTAINER_NGINX=${CONTAINER_NGINX}
+      - INDEX_NGINX=${INDEX_NGINX}
+      - PIPELINE_NGINX_ACCESS=${PIPELINE_NGINX_ACCESS}
+    command: ["--strict.perms=false"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+# volumes:
+  # logs:
