@@ -14,7 +14,6 @@ filebeat.autodiscover:
                         - /var/lib/docker/containers/${data.docker.container.id}/*.log
                       stream: stdout
                     error.input:
-                      pipeline: "${PIPELINE_NGINX_ACCESS}"
                       type: container
                       paths:
                         - /var/lib/docker/containers/${data.docker.container.id}/*.log
@@ -26,7 +25,6 @@ output.elasticsearch:
   compression_level: 9
   indices:
     - index: "${INDEX_NGINX}"
-  pipeline: ${PIPELINE_NGINX_ACCESS}
 
 setup.kibana:
   host: "${KIBANA_HOST}"
